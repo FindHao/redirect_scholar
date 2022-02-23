@@ -1,42 +1,39 @@
 {
-    "manifest_version": 2,
-    "name": "EZProxy Redirect",
-    "description": "Quickly reload pages through your library's EZProxy.",
-    "version": "18",
-    "author": "Tom Wambold <tom5760@gmail.com>",
-    "homepage_url": "https://github.com/tom5760/chrome-ezproxy",
-    "background": {
-        "scripts": [
-            "browser-polyfill.min.js",
-            "shared.js",
-            "background.js"
-        ],
-        "persistent": false
+  "manifest_version": 2,
+  "name": "Redirect Scholar",
+  "description": "Quickly reload pages through your library's EZProxy.",
+  "version": "1",
+  "author": "Yueming Hao<find@findhao.net>",
+  "homepage_url": "https://github.com/FindHao/redirect_scholar",
+  "background": {
+    "scripts": ["browser-polyfill.min.js", "shared.js", "background.js"],
+    "persistent": true
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "activeTab",
+    "webRequest",
+    "webRequestBlocking",
+    "https://ezproxy-db.appspot.com/proxies.json",
+    "https://ieeexplore.ieee.org/*"
+  ],
+  "optional_permissions": ["clipboardWrite"],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "browser_action": {
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
     },
-    "options_ui": {
-        "page": "options.html",
-        "open_in_tab": false
-    },
-    "permissions": [
-        "contextMenus",
-        "storage",
-        "activeTab",
-        "https://ezproxy-db.appspot.com/proxies.json"
-    ],
-    "optional_permissions": [
-        "clipboardWrite"
-    ],
-    "icons": {
-        "16": "icon16.png",
-        "48": "icon48.png",
-        "128": "icon128.png"
-    },
-    "browser_action": {
-        "default_icon": {
-            "16": "icon16.png",
-            "48": "icon48.png",
-            "128": "icon128.png"
-        },
-        "default_title": "Reload through EZProxy"
-    }
+    "default_title": "Redirect to Scholar library"
+  }
 }

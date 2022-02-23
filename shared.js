@@ -1,10 +1,17 @@
 function saveProxies(proxies) {
+  localStorage.setItem('proxies', JSON.stringify(proxies))
   return browser.storage.sync.set({ proxies })
 }
 
 async function loadProxies() {
   const items = await browser.storage.sync.get('proxies')
   return items.proxies || []
+}
+
+function loadProxies_sync() {
+  const items = JSON.parse(localStorage.getItem("proxies"));
+  console.log("loadProxies_sync", items);
+  return items || [];
 }
 
 function transformURL(url, proxy) {
@@ -14,7 +21,6 @@ function transformURL(url, proxy) {
   if (!url.startsWith('http://') && !url.startsWith('https://')) {
     throw new Error('not proxying http or https')
   }
-
   return proxy.replace('$@', url)
 }
 
