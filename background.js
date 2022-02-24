@@ -1,3 +1,21 @@
+
+
+function tryImport(...fileNames) {
+  try {
+    importScripts(...fileNames);
+    return true;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
+self.oninstall = () => {
+  tryImport("/shared.js");
+};
+
+
+
 async function migrate() {
   const items = await browser.storage.sync.get(["proxies", "base_url"]);
   if (items.proxies) {
@@ -14,16 +32,16 @@ async function migrate() {
     return;
   }
 
-  if (localStorage.base_url) {
+  if (browser.storage.local.base_url) {
     console.info("migrated from localStorage base_url");
     // Migrate to new format.
     await saveProxies([
       {
-        name: localStorage.base_url,
-        url: localStorage.base_url,
+        name: browser.storage.local.base_url,
+        url: browser.storage.local.base_url,
       },
     ]);
-    delete localStorage.base_url;
+    delete browser.storage.local.base_url;
     return;
   }
 
@@ -32,7 +50,7 @@ async function migrate() {
 
 async function updateMenus() {
   browser.contextMenus.removeAll();
-  browser.browserAction.setPopup({ popup: "" });
+  browser.action.setPopup({ popup: "" });
 
   const proxies = await loadProxies();
 
@@ -80,7 +98,7 @@ async function updateMenus() {
   }
 
   if (proxies.length > 1) {
-    browser.browserAction.setPopup({
+    browser.action.setPopup({
       popup: browser.extension.getURL("popup.html"),
     });
 
@@ -133,6 +151,10 @@ async function urlFromMenuInfo(info) {
   return info.menuItemId.substr(2);
 }
 
+if (typeof browser === "undefined") {
+  var browser = chrome;
+}
+
 browser.runtime.onInstalled.addListener(async (details) => {
   console.info("onInstalled");
 
@@ -144,7 +166,7 @@ browser.storage.onChanged.addListener(async (changes) => {
   await updateMenus();
 });
 
-browser.browserAction.onClicked.addListener(async (tab) => {
+browser.action.onClicked.addListener(async (tab) => {
   const proxies = await loadProxies();
   if (proxies.length === 0) {
     browser.runtime.openOptionsPage();
@@ -188,45 +210,45 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
   }
 });
 
-chrome.webRequest.onBeforeRequest.addListener(
-  // this function has to be synchronous
-  function (details) {
-    console.log(details);
-    var reg = /abstract\/document\/(.*)/;
-    var result = reg.exec(details.url);
-    if (result && result[1] != "null") {
-      console.log(result);
-      const proxies = loadProxies_sync();
-      if (proxies.length != 0) {
-        console.log(proxies);
-        console.log(typeof proxies);
-        var proxy = proxies[0]["url"];
-        var newURL = transformURL(details.url, proxy);
-        console.log(newURL);
-        return { redirectUrl: newURL };
-      } else {
-        console.log("no proxy");
-      }
-    } else {
-      console.log("not abstract");
-    }
-    return { redirectUrl: details.url };
-  },
-  {
-    urls: [
-      "https://ieeexplore.ieee.org/abstract/document/*",
-      "https://ieeexplore.ieee.org/document/*",
-    ],
-    types: [
-      "main_frame",
-      "sub_frame",
-      "stylesheet",
-      "script",
-      "image",
-      "object",
-      "xmlhttprequest",
-      "other",
-    ],
-  },
-  ["blocking"]
-);
+// chrome.webRequest.onBeforeRequest.addListener(
+//   // this function has to be synchronous
+//   function (details) {
+//     console.log(details);
+//     var reg = /abstract\/document\/(.*)/;
+//     var result = reg.exec(details.url);
+//     if (result && result[1] != "null") {
+//       console.log(result);
+//       const proxies = loadProxies_sync();
+//       if (proxies.length != 0) {
+//         console.log(proxies);
+//         console.log(typeof proxies);
+//         var proxy = proxies[0]["url"];
+//         var newURL = transformURL(details.url, proxy);
+//         console.log(newURL);
+//         return { redirectUrl: newURL };
+//       } else {
+//         console.log("no proxy");
+//       }
+//     } else {
+//       console.log("not abstract");
+//     }
+//     return { redirectUrl: details.url };
+//   },
+//   {
+//     urls: [
+//       "https://ieeexplore.ieee.org/abstract/document/*",
+//       "https://ieeexplore.ieee.org/document/*",
+//     ],
+//     types: [
+//       "main_frame",
+//       "sub_frame",
+//       "stylesheet",
+//       "script",
+//       "image",
+//       "object",
+//       "xmlhttprequest",
+//       "other",
+//     ],
+//   },
+//   ["blocking"]
+// );

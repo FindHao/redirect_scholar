@@ -1,13 +1,12 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Redirect Scholar",
   "description": "Quickly reload pages through your library's EZProxy.",
   "version": "1",
   "author": "Yueming Hao<find@findhao.net>",
   "homepage_url": "https://github.com/FindHao/redirect_scholar",
   "background": {
-    "scripts": ["browser-polyfill.min.js", "shared.js", "background.js"],
-    "persistent": true
+    "service_worker": "background.js"
   },
   "options_ui": {
     "page": "options.html",
@@ -17,10 +16,11 @@
     "contextMenus",
     "storage",
     "activeTab",
-    "webRequest",
-    "webRequestBlocking",
+    "declarativeNetRequestWithHostAccess"
+  ],
+  "host_permissions": [
     "https://ezproxy-db.appspot.com/proxies.json",
-    "https://ieeexplore.ieee.org/*"
+    "*://ieeexplore.ieee.org/*"
   ],
   "optional_permissions": ["clipboardWrite"],
   "icons": {
@@ -28,7 +28,7 @@
     "48": "icon48.png",
     "128": "icon128.png"
   },
-  "browser_action": {
+  "action": {
     "default_icon": {
       "16": "icon16.png",
       "48": "icon48.png",
