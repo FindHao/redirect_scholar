@@ -20,7 +20,7 @@
   ],
   "host_permissions": [
     "https://ezproxy-db.appspot.com/proxies.json",
-    "https://github.com/FindHao/redirect_scholar/blob/master/proxies.json",
+    "https://raw.githubusercontent.com/FindHao/redirect_scholar/master/proxies_redirect.json",
     "*://ieeexplore.ieee.org/*",
     "*://dl.acm.org/*"
   ],

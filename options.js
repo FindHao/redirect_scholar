@@ -194,7 +194,9 @@ async function updateProxies() {
 
   let proxies_redirect;
   try {
-    const response = await fetch("http://0.0.0.0:8000/proxies_redirect2.json");
+    const response = await fetch(
+      "https://raw.githubusercontent.com/FindHao/redirect_scholar/master/proxies_redirect.json"
+    );
     proxies_redirect = await response.json();
     console.log("proxies_redirect", proxies_redirect);
   } catch (err) {
