@@ -1,5 +1,3 @@
-
-
 function tryImport(...fileNames) {
   try {
     importScripts(...fileNames);
@@ -9,12 +7,9 @@ function tryImport(...fileNames) {
   }
 }
 
-
 self.oninstall = () => {
   tryImport("/shared.js");
 };
-
-
 
 async function migrate() {
   const items = await browser.storage.sync.get(["proxies", "base_url"]);
@@ -154,16 +149,74 @@ async function urlFromMenuInfo(info) {
 if (typeof browser === "undefined") {
   var browser = chrome;
 }
+// the domains we want to redirect
+let urls = [
+  "ieeexplore.ieee.org", 
+"dl.acm.org"];
+// the key is the domain name in urls, and the value is the corresponding code in proxies_redirect.json
+let url_map = { "ieeexplore.ieee.org": "ieee", "dl.acm.org": "acm" };
+
+async function redirect_rule(details) {
+  // it is a list
+  const proxies = await loadProxies();
+  if (proxies.length === 0) {
+    console.log("redirect_rule-> no proxy definied");
+    return {};
+  }
+  // it is a Map
+  const proxies_redirect = await loadProxies_redirect();
+  console.log("redirect_rule-> proxies:", proxies);
+  console.log("redirect_rule-> proxies_redirect:", proxies_redirect);
+  if (proxies_redirect.size !== 0) {
+    var university_name = proxies[0].name;
+    var proxies_map = proxies_redirect.get(university_name);
+    urls.forEach((domain, index) => {
+      let id = index + 1;
+      console.log(domain, index);
+      var short_code = url_map[domain];
+      var target_proxy = proxies_map.get(short_code);
+      console.log("redirect_rule-> target_proxy:", target_proxy);
+      if (target_proxy) {
+        chrome.declarativeNetRequest.updateDynamicRules({
+          addRules: [
+            {
+              id: id,
+              priority: 1,
+              action: {
+                type: "redirect",
+                redirect: { regexSubstitution: target_proxy },
+              },
+              condition: {
+                regexFilter: domain,
+                resourceTypes: ["xmlhttprequest", "main_frame"],
+                excludedDomains: [
+                  "*://ieeexplore.ieee.org/document/null*",
+                  "*://dl.acm.org/null*",
+                  "*://dl.acm.org/*null*",
+                  "*://dl.acm.org/doi/abs/*/null*",
+                ],
+              },
+            },
+          ],
+          removeRuleIds: [id],
+        });
+      }
+    });
+  } else {
+    console.log("redirect_rule-> no proxy definied");
+  }
+}
 
 browser.runtime.onInstalled.addListener(async (details) => {
   console.info("onInstalled");
-
+  await redirect_rule();
   await migrate();
   await updateMenus();
 });
 
 browser.storage.onChanged.addListener(async (changes) => {
   await updateMenus();
+  await redirect_rule();
 });
 
 browser.action.onClicked.addListener(async (tab) => {
@@ -209,46 +262,3 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
       break;
   }
 });
-
-// chrome.webRequest.onBeforeRequest.addListener(
-//   // this function has to be synchronous
-//   function (details) {
-//     console.log(details);
-//     var reg = /abstract\/document\/(.*)/;
-//     var result = reg.exec(details.url);
-//     if (result && result[1] != "null") {
-//       console.log(result);
-//       const proxies = loadProxies_sync();
-//       if (proxies.length != 0) {
-//         console.log(proxies);
-//         console.log(typeof proxies);
-//         var proxy = proxies[0]["url"];
-//         var newURL = transformURL(details.url, proxy);
-//         console.log(newURL);
-//         return { redirectUrl: newURL };
-//       } else {
-//         console.log("no proxy");
-//       }
-//     } else {
-//       console.log("not abstract");
-//     }
-//     return { redirectUrl: details.url };
-//   },
-//   {
-//     urls: [
-//       "https://ieeexplore.ieee.org/abstract/document/*",
-//       "https://ieeexplore.ieee.org/document/*",
-//     ],
-//     types: [
-//       "main_frame",
-//       "sub_frame",
-//       "stylesheet",
-//       "script",
-//       "image",
-//       "object",
-//       "xmlhttprequest",
-//       "other",
-//     ],
-//   },
-//   ["blocking"]
-// );

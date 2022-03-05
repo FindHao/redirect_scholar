@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Redirect Scholar",
-  "description": "Quickly reload pages through your library's EZProxy.",
+  "description": "Quickly reload pages through your library's proxies.",
   "version": "1",
   "author": "Yueming Hao<find@findhao.net>",
   "homepage_url": "https://github.com/FindHao/redirect_scholar",
@@ -20,7 +20,9 @@
   ],
   "host_permissions": [
     "https://ezproxy-db.appspot.com/proxies.json",
-    "*://ieeexplore.ieee.org/*"
+    "https://github.com/FindHao/redirect_scholar/blob/master/proxies.json",
+    "*://ieeexplore.ieee.org/*",
+    "*://dl.acm.org/*"
   ],
   "optional_permissions": ["clipboardWrite"],
   "icons": {
