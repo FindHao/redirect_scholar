@@ -19,8 +19,8 @@
     "declarativeNetRequestWithHostAccess"
   ],
   "host_permissions": [
-    "https://ezproxy-db.appspot.com/proxies.json",
     "https://raw.githubusercontent.com/FindHao/redirect_scholar/master/proxies_redirect.json",
+    "https://raw.githubusercontent.com/FindHao/redirect_scholar/master/proxies.json",
     "*://ieeexplore.ieee.org/*",
     "*://dl.acm.org/*"
   ],

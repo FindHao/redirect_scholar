@@ -184,7 +184,9 @@ async function updateProxies() {
 
   let proxies;
   try {
-    const response = await fetch("https://ezproxy-db.appspot.com/proxies.json");
+    const response = await fetch(
+      "https://raw.githubusercontent.com/FindHao/redirect_scholar/master/proxies.json"
+    );
     proxies = await response.json();
     console.log(proxies);
   } catch (err) {
