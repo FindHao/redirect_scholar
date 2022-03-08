@@ -2,5 +2,9 @@
   "North Carolina State University": {
     "ieee": "ieeexplore-ieee-org.prox.lib.ncsu.edu",
     "acm": "dl-acm-org.prox.lib.ncsu.edu"
+  },
+  "College of William and Mary":{
+    "ieee": "ieeexplore-ieee-org.prox.lib.wm.edu",
+    "acm": "dl-acm-org.prox.lib.wm.edu"
   }
 }
