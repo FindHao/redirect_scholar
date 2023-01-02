@@ -154,7 +154,7 @@ let urls = [
   "ieeexplore.ieee.org", 
 "dl.acm.org"];
 // the key is the domain name in urls, and the value is the corresponding code in proxies_redirect.json
-let url_map = { "ieeexplore.ieee.org": "ieee", "dl.acm.org": "acm" };
+let url_map = { "ieeexplore.ieee.org": "ieee", "dl.acm.org": "acm", "link.springer.com": "springer" };
 
 async function redirect_rule(details) {
   // it is a list
@@ -194,6 +194,7 @@ async function redirect_rule(details) {
                   "*://dl.acm.org/null*",
                   "*://dl.acm.org/*null*",
                   "*://dl.acm.org/doi/abs/*/null*",
+                  "*://link.springer.com/null*"
                 ],
               },
             },

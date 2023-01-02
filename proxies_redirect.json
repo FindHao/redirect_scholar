@@ -1,11 +1,12 @@
 {
   "North Carolina State University": {
-    "ieee": "ieeexplore-ieee-org.prox.lib.ncsu.edu",
-    "acm": "dl-acm-org.prox.lib.ncsu.edu"
+    "ieee": "ieeexplore-ieee-org.prox.ncsu.edu",
+    "acm": "dl-acm-org.prox.lib.ncsu.edu",
+    "springer": "link-springer-com.prox.lib.ncsu.edu"
   },
   "College of William and Mary":{
-    "ieee": "ieeexplore-ieee-org.prox.lib.wm.edu",
-    "acm": "dl-acm-org.prox.lib.wm.edu"
+    "ieee": "ieeexplore-ieee-org.proxy.wm.edu",
+    "acm": "dl-acm-org.proxy.wm.edu"
   },
   "Rice University":{
     "ieee": "ieeexplore-ieee-org.ezproxy.rice.edu",
