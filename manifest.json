@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Redirect Scholar",
   "description": "Quickly reload pages through your library's proxies.",
-  "version": "2",
+  "version": "3",
   "author": "Yueming Hao<find@findhao.net>",
   "homepage_url": "https://github.com/FindHao/redirect_scholar",
   "background": {
